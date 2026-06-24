@@ -1,0 +1,6 @@
+@BandHub.Bff_HostAddress = http://localhost:5223
+
+GET {{BandHub.Bff_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

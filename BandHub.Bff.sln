@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.Bff", "BandHub.Bff\BandHub.Bff.csproj", "{29225C77-2407-4921-8DE1-38CF1854A744}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{662346E9-A623-498D-BD05-0558F26808FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandHub.Bff.UnitTests", "tests\BandHub.Bff.UnitTests\BandHub.Bff.UnitTests.csproj", "{B323214F-904C-47F3-8E4D-D319079F5536}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29225C77-2407-4921-8DE1-38CF1854A744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29225C77-2407-4921-8DE1-38CF1854A744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29225C77-2407-4921-8DE1-38CF1854A744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29225C77-2407-4921-8DE1-38CF1854A744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B323214F-904C-47F3-8E4D-D319079F5536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B323214F-904C-47F3-8E4D-D319079F5536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B323214F-904C-47F3-8E4D-D319079F5536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B323214F-904C-47F3-8E4D-D319079F5536}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B323214F-904C-47F3-8E4D-D319079F5536} = {662346E9-A623-498D-BD05-0558F26808FE}
+	EndGlobalSection
+EndGlobal
