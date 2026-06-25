@@ -1,7 +1,7 @@
 # 🎸 BandHub — BFF (Backend for Frontend)
 
 <p align="center">
-  <strong>Gateway de entrada do BandHub — orquestra chamadas aos microsserviços</strong>
+  <strong>Orquestrador de chamadas agregadas do BandHub</strong>
 </p>
 
 <p align="center">
@@ -29,11 +29,13 @@
 
 ## 📖 Sobre o Serviço
 
-O **BFF (Backend for Frontend)** é o ponto de entrada do BandHub. Ele atua como um gateway que recebe requisições dos clientes e as orquestra entre os microsserviços internos (**UserService** e **BandService**), expondo uma API unificada e simplificada para o frontend.
+O **BFF (Backend for Frontend)** orquestra chamadas agregadas entre os microsserviços do BandHub. Ele é responsável por operações que envolvem mais de um serviço (ex.: registrar uma banda requer chamar UserService + BandService).
+
+> 🚪 **Ponto de entrada único:** o [BandHub.Gateway](https://github.com/bandhub-br/bandhub-gateway-dotnet) (porta `5000`) roteia `/bff/**` automaticamente para este serviço.
 
 | Porta | Descrição |
 |-------|-----------|
-| `5223` | Gateway de entrada — roteamento e orquestração de chamadas |
+| `5223` | Orquestração de chamadas agregadas entre microsserviços |
 
 ### Microsserviços integrados
 
