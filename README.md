@@ -39,6 +39,7 @@ O **BFF (Backend for Frontend)** é o ponto de entrada do BandHub. Ele atua como
 
 | Serviço | URL interna |
 |---------|-------------|
+| **AuthService** | `http://localhost:5290` |
 | **UserService** | `http://localhost:5293` |
 | **BandService** | `http://localhost:5081` |
 
@@ -55,9 +56,11 @@ Feature/
 └── Request.cs       → Contrato de entrada
 
 Integrations/
+├── AuthService/
+│   ├── AuthServiceClient.cs         → Cliente HTTP para o AuthService (login)
+│   ├── LoginRequest.cs / LoginResponse.cs
 ├── UserService/
 │   ├── UserServiceClient.cs         → Cliente HTTP para o UserService
-│   ├── LoginRequest.cs / LoginResponse.cs
 │   ├── RegisterAccountRequest.cs / RegisterAccountResponse.cs
 └── BandService/
     ├── BandServiceClient.cs         → Cliente HTTP para o BandService
@@ -81,6 +84,7 @@ Integrations/
 | .NET | 8.0 | Framework principal |
 | ASP.NET Core | 8.0 | Web API com Minimal APIs |
 | HttpClient | — | Comunicação com microsserviços internos |
+| JwtBearer | 8.0.28 | Validação de tokens JWT emitidos pelo AuthService |
 | Swagger / Swashbuckle | 6.6.2 | Documentação da API |
 | xUnit | 2.5.3 | Framework de testes |
 | Moq | 4.20.72 | Mocking para testes unitários |
@@ -99,7 +103,8 @@ BandHub.Bff/
 │   │       ├── Login/
 │   │       │   ├── LoginEndpoint.cs
 │   │       │   ├── LoginHandler.cs
-│   │       │   └── LoginRequest.cs
+│   │       │   ├── LoginRequest.cs
+│   │       │   └── LoginResponse.cs
 │   │       ├── RegisterUser/
 │   │       │   ├── RegisterUserEndpoint.cs
 │   │       │   ├── RegisterUserHandler.cs
@@ -110,10 +115,12 @@ BandHub.Bff/
 │   │           ├── RegisterBandRequest.cs
 │   │           └── RegisterBandResponse.cs
 │   ├── Integrations/
+│   │   ├── AuthService/
+│   │   │   ├── AuthServiceClient.cs
+│   │   │   ├── LoginRequest.cs
+│   │   │   └── LoginResponse.cs
 │   │   ├── UserService/
 │   │   │   ├── UserServiceClient.cs
-│   │   │   ├── LoginRequest.cs
-│   │   │   ├── LoginResponse.cs
 │   │   │   ├── RegisterAccountRequest.cs
 │   │   │   └── RegisterAccountResponse.cs
 │   │   └── BandService/
@@ -169,6 +176,7 @@ O BFF depende dos seguintes serviços em execução:
 
 | Serviço | Porta |
 |---------|-------|
+| AuthService | `5290` |
 | UserService | `5293` |
 | BandService | `5081` |
 
@@ -180,6 +188,7 @@ As URLs dos microsserviços estão no arquivo `appsettings.json`:
 ```json
 {
   "Services": {
+    "AuthServiceBaseUrl": "http://localhost:5290",
     "UserServiceBaseUrl": "http://localhost:5293",
     "BandServiceBaseUrl": "http://localhost:5081"
   }
@@ -257,8 +266,8 @@ Todos os testes seguem o padrão **AAA (Arrange-Act-Assert)**:
 [Fact]
 public async Task HandleAsync_ShouldReturnLoginResponse_WhenCredentialsAreValid()
 {
-    // Arrange - preparar mocks do UserServiceClient
-    _userServiceClientMock
+    // Arrange - preparar mocks do AuthServiceClient
+    _authServiceClientMock
         .Setup(c => c.LoginAsync(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(new LoginResponse(...));
 
@@ -267,6 +276,7 @@ public async Task HandleAsync_ShouldReturnLoginResponse_WhenCredentialsAreValid(
 
     // Assert - verificar o resultado
     response.Should().NotBeNull();
+    response.AcessToken.Should().NotBeEmpty();
 }
 ```
 
@@ -276,7 +286,7 @@ public async Task HandleAsync_ShouldReturnLoginResponse_WhenCredentialsAreValid(
 
 | Método | Rota | Descrição | Microsserviço |
 |--------|------|-----------|---------------|
-| `POST` | `/accounts/login` | Autenticar uma conta | UserService |
+| `POST` | `/accounts/login` | Autenticar uma conta | AuthService |
 | `POST` | `/accounts/register/user` | Registrar uma conta de usuário | UserService |
 | `POST` | `/accounts/register/band` | Registrar uma conta de banda | UserService + BandService |
 
@@ -296,7 +306,11 @@ public async Task HandleAsync_ShouldReturnLoginResponse_WhenCredentialsAreValid(
   "accountId": "550e8400-e29b-41d4-a716-446655440000",
   "name": "John Doe",
   "email": "john@example.com",
-  "accountType": "User"
+  "accountType": "User",
+  "acessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "acessTokenExpiraEm": "2026-06-25T13:00:00Z",
+  "refreshToken": "base64-refresh-token",
+  "refreshTokenExpiraEm": "2026-07-02T12:00:00Z"
 }
 ```
 
