@@ -1,6 +1,7 @@
 using BandHub.Bff.Features.Accounts.Login;
 using BandHub.Bff.Features.Accounts.RegisterBand;
 using BandHub.Bff.Features.Accounts.RegisterUser;
+using BandHub.Bff.Integrations.AuthService;
 using BandHub.Bff.Integrations.BandService;
 using BandHub.Bff.Integrations.UserService;
 
@@ -18,6 +19,11 @@ public static class DependencyInjection
         services.AddHttpClient<BandServiceClient>(client =>
         {
             client.BaseAddress = new Uri(configuration["Services:BandServiceBaseUrl"]!);
+        });
+
+        services.AddHttpClient<AuthServiceClient>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["Services:AuthServiceBaseUrl"]!);
         });
 
         services.AddScoped<RegisterBandHandler>();
